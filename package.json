@@ -1,0 +1,55 @@
+{
+    "name": "tether-mcp",
+    "version": "1.0.0",
+    "description": "An MCP Server that acts as a persistent Senior Architect to prevent Agent Drift in AI-assisted coding.",
+    "type": "module",
+    "main": "dist/index.js",
+    "bin": {
+        "tether-mcp": "dist/cli.js"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE",
+        "tether.config.example.json"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "start": "node dist/index.js",
+        "prepare": "npm run build"
+    },
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "ai",
+        "architecture",
+        "agent-drift",
+        "claude",
+        "cursor",
+        "developer-tools",
+        "code-quality",
+        "guardrails"
+    ],
+    "author": "MoayadEsam",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/MoayadEsam/tether-mcp.git"
+    },
+    "homepage": "https://github.com/MoayadEsam/tether-mcp#readme",
+    "bugs": {
+        "url": "https://github.com/MoayadEsam/tether-mcp/issues"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.11.0",
+        "zod": "^3.24.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "typescript": "^5.7.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
