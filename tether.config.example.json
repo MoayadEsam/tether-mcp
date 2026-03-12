@@ -1,0 +1,102 @@
+{
+    "projectName": "my-awesome-project",
+    "techStack": {
+        "frontend": [
+            "React",
+            "Next.js",
+            "Tailwind CSS"
+        ],
+        "backend": [
+            "Node.js",
+            "Express"
+        ],
+        "database": [
+            "PostgreSQL"
+        ],
+        "orm": [
+            "Prisma"
+        ],
+        "testing": [
+            "Vitest",
+            "Playwright"
+        ]
+    },
+    "invariants": [
+        "All API routes must validate input with Zod before processing.",
+        "Authentication uses JWT tokens issued by our auth service — no third-party auth providers.",
+        "Database access must go through Prisma — no raw SQL queries.",
+        "All new API endpoints must have corresponding integration tests.",
+        "Frontend state management uses React Context + useReducer — no Redux or Zustand."
+    ],
+    "dependencies": {
+        "allowed": [
+            "zod",
+            "date-fns",
+            "clsx",
+            "tailwind-merge"
+        ],
+        "blocked": [
+            {
+                "name": "moment",
+                "reason": "Deprecated and large bundle size. Use date-fns instead.",
+                "alternatives": [
+                    "date-fns",
+                    "dayjs"
+                ],
+                "severity": "block"
+            },
+            {
+                "name": "jquery",
+                "reason": "Not compatible with React's virtual DOM model.",
+                "alternatives": [],
+                "severity": "block"
+            },
+            {
+                "name": "lodash",
+                "reason": "Tree-shaking issues. Use native JS methods or lodash-es.",
+                "alternatives": [
+                    "lodash-es",
+                    "remeda"
+                ],
+                "severity": "warn"
+            }
+        ],
+        "reviewRequired": [
+            "sharp",
+            "puppeteer",
+            "canvas",
+            "node-gyp"
+        ]
+    },
+    "architectureFile": "ARCHITECTURE.md",
+    "decisionsFile": "DECISIONS.md",
+    "fileStructure": [
+        {
+            "pattern": "component",
+            "allowedPaths": [
+                "src/components/",
+                "src/app/"
+            ],
+            "reason": "All React components must live in src/components/ or src/app/"
+        },
+        {
+            "pattern": "api-route",
+            "allowedPaths": [
+                "src/app/api/"
+            ],
+            "reason": "API routes must use Next.js Route Handlers in app/api/"
+        }
+    ],
+    "codePatterns": [
+        {
+            "name": "State Management",
+            "rule": "Use React Context + useReducer for complex state — no Redux or Zustand",
+            "scope": "frontend/state"
+        },
+        {
+            "name": "Data Fetching",
+            "rule": "Use Server Components for data fetching — no client-side fetch in components",
+            "scope": "frontend"
+        }
+    ]
+}
