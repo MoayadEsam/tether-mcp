@@ -10,9 +10,9 @@
  */
 
 import { readFile, writeFile } from "node:fs/promises";
-import { resolve, basename } from "node:path";
-import { detectStack } from "./utils/detect-stack.js";
-import { loadConfig, fileExists, resolveProjectPath, readMarkdownFile } from "./utils/file.js";
+import { resolve } from "node:path";
+import { detectProjectStack } from "./utils/detect-stack.js";
+import { loadConfig, fileExists, resolveProjectPath } from "./utils/file.js";
 import { TetherConfigSchema } from "./types/config.js";
 import type { TetherConfig } from "./types/config.js";
 
@@ -71,70 +71,39 @@ async function runInit(): Promise<void> {
         process.exit(1);
     }
 
-    // Try to read package.json for framework detection
-    const pkgPath = resolve(cwd, "package.json");
+    // Try to detect project stack across all ecosystems
     let config: TetherConfig;
 
-    if (await fileExists(pkgPath)) {
-        const raw = await readFile(pkgPath, "utf-8");
-        const pkg = JSON.parse(raw) as Record<string, unknown>;
-        const stack = detectStack(pkg);
+    const stack = await detectProjectStack(cwd);
 
-        if (stack.frameworks.length > 0) {
-            success(
-                `Detected stack: ${BOLD}${stack.frameworks.join(", ")}${RESET}`
-            );
-        } else {
-            warn("No known framework detected. Using sensible defaults.");
-        }
-
-        config = {
-            projectName: stack.projectName,
-            techStack: stack.techStack,
-            invariants: stack.suggestedInvariants.length > 0
-                ? stack.suggestedInvariants
-                : [
-                    "All new code must include appropriate error handling.",
-                    "Document public APIs with JSDoc or TSDoc comments.",
-                ],
-            dependencies: {
-                allowed: stack.suggestedAllowed,
-                blocked: stack.suggestedBlocked,
-                reviewRequired: stack.suggestedReviewRequired,
-            },
-            fileStructure: [],
-            codePatterns: [],
-            architectureFile: "ARCHITECTURE.md",
-            decisionsFile: "DECISIONS.md",
-        };
+    if (stack.frameworks.length > 0) {
+        success(
+            `Detected stack: ${BOLD}${stack.frameworks.join(", ")}${RESET}`
+        );
     } else {
-        warn("No package.json found. Generating a generic config.");
+        warn("No known framework detected. Using sensible defaults.");
+    }
 
-        config = {
-            projectName: basename(cwd),
-            techStack: {},
-            invariants: [
+    config = {
+        projectName: stack.projectName,
+        techStack: stack.techStack,
+        invariants: stack.suggestedInvariants.length > 0
+            ? stack.suggestedInvariants
+            : [
                 "All new code must include appropriate error handling.",
-                "Document public APIs with JSDoc or TSDoc comments.",
+                "Document public APIs with appropriate documentation comments.",
                 "Follow the existing code style and conventions.",
             ],
-            dependencies: {
-                allowed: [],
-                blocked: [
-                    {
-                        name: "moment",
-                        reason: "Deprecated and large bundle size.",
-                        alternatives: ["date-fns", "dayjs", "luxon"],
-                    },
-                ],
-                reviewRequired: [],
-            },
-            fileStructure: [],
-            codePatterns: [],
-            architectureFile: "ARCHITECTURE.md",
-            decisionsFile: "DECISIONS.md",
-        };
-    }
+        dependencies: {
+            allowed: stack.suggestedAllowed,
+            blocked: stack.suggestedBlocked,
+            reviewRequired: stack.suggestedReviewRequired,
+        },
+        fileStructure: [],
+        codePatterns: [],
+        architectureFile: "ARCHITECTURE.md",
+        decisionsFile: "DECISIONS.md",
+    };
 
     // Write the config
     await writeFile(configPath, JSON.stringify(config, null, 2) + "\n", "utf-8");

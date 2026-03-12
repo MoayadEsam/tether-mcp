@@ -44,7 +44,7 @@ You've been there. You ask an AI agent to add a feature and it:
 
 - 🎲 **Installs `moment.js`** when your project already uses `date-fns`
 - 🏗️ **Creates an Express server** inside your Next.js app
-- 🧩 **Adds Zustand** when your team agreed on React Context
+- 🧩 **Adds Riverpod** when your Flutter team agreed on BLoC
 - 📝 **Forgets the entire architecture** after a few messages
 
 Every session starts from zero. The AI has no memory of your rules, your stack decisions, or your architectural boundaries. This is **Agent Drift**, and it turns AI-assisted coding into a technical debt factory.
@@ -57,7 +57,7 @@ Every session starts from zero. The AI has no memory of your rules, your stack d
 npx tether-mcp init
 ```
 
-Tether scans your `package.json`, **auto-detects your framework** (Next.js, Express, Prisma, Tailwind, Angular, Vue, SvelteKit, and 30+ more), and generates a tailored `tether.config.json` with smart defaults.
+Tether scans your project manifest (`package.json`, `pubspec.yaml`, `.csproj`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `build.gradle`, `pom.xml`, or `Package.swift`), **auto-detects your framework** across **8 ecosystems and 90 frameworks**, and generates a tailored `tether.config.json` with smart defaults.
 
 ### 2. Connect to Your AI Agent
 
@@ -311,7 +311,9 @@ No data leaves your machine. Telemetry resets when the server restarts.
 
 ## Supported Framework Detection
 
-Tether auto-detects **30+ frameworks** and tools:
+Tether auto-detects **90 frameworks** across **8 ecosystems**:
+
+### JavaScript / TypeScript (`package.json`)
 
 | Category | Detected |
 |----------|----------|
@@ -324,6 +326,81 @@ Tether auto-detects **30+ frameworks** and tools:
 | Auth | NextAuth.js |
 | Build | Vite |
 | Language | TypeScript |
+
+### Python (`pyproject.toml`, `requirements.txt`)
+
+| Category | Detected |
+|----------|----------|
+| Backend | Django, Flask, FastAPI |
+| ORM | SQLAlchemy |
+| Testing | pytest |
+| Validation | Pydantic |
+| Task Queue | Celery |
+| Data Science | NumPy, pandas |
+| ML | TensorFlow, PyTorch |
+| Frontend | Streamlit |
+
+### Dart / Flutter (`pubspec.yaml`)
+
+| Category | Detected |
+|----------|----------|
+| Framework | Flutter |
+| State | BLoC, Riverpod, GetX, Provider |
+| HTTP | Dio |
+| Backend | Firebase |
+| Routing | GoRouter |
+| Codegen | Freezed |
+
+### C# / .NET (`.csproj`)
+
+| Category | Detected |
+|----------|----------|
+| Backend | ASP.NET Core |
+| ORM | Entity Framework Core, Dapper |
+| Frontend | Blazor |
+| Mobile | .NET MAUI |
+| Testing | xUnit, NUnit |
+| Architecture | MediatR |
+| Logging | Serilog |
+| Validation | FluentValidation |
+
+### Go (`go.mod`)
+
+| Category | Detected |
+|----------|----------|
+| Backend | Gin, Echo, Fiber, Chi |
+| ORM | GORM |
+| Testing | Testify |
+| Routing | Gorilla Mux |
+
+### Rust (`Cargo.toml`)
+
+| Category | Detected |
+|----------|----------|
+| Backend | Actix Web, Axum, Rocket |
+| Async | Tokio |
+| ORM | Diesel, SeaORM |
+| Serialization | Serde |
+| Database | SQLx |
+| CLI | Clap |
+
+### Java / Kotlin (`build.gradle`, `pom.xml`)
+
+| Category | Detected |
+|----------|----------|
+| Backend | Spring Boot, Ktor |
+| ORM | Hibernate |
+| Testing | JUnit 5 |
+| Frontend | Jetpack Compose |
+
+### Swift (`Package.swift`)
+
+| Category | Detected |
+|----------|----------|
+| Backend | Vapor |
+| HTTP | Alamofire |
+| CLI | Swift Argument Parser |
+| Database | GRDB |
 
 Each detection adds **targeted invariants** and **smart blocked-package rules** specific to your stack.
 
